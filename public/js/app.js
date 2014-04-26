@@ -11,6 +11,7 @@ var App = (function () {
 
     init: function () {
       App.prop.socket = io.connect(location.protocol + '//' + location.host);
+      App.prop._id = Math.floor(Math.random() * 100000000);
 
       App.initEvents();
       App.bindEvents();
@@ -29,23 +30,27 @@ var App = (function () {
     onConnect: function () {
       App.prop.message.innerHTML = 'Waiting...';
       App.prop.socket.emit('join', {
-        _id: Math.floor(Math.random() * 100000000),
+        _id: App.prop._id,
         room: gameCode,
-        mobile: navigator.userAgent.match(/iPhone/i)
+        mobile: navigator.userAgent.match(/iPhone/i) ? true : false
       });
     },
 
     onGameStart: function (data) {
       if (navigator.userAgent.match(/iPhone/i)) {
         // App.Pad.init(); // DISPLAY GAME PAD ON MOBILE
-        App.prop.message.innerHTML = '<a data-player_id=\'' + data._id + '\' href=\'\' id=\'gogogo\'>GO GO GO</a>';
-        document.getElementById('gogogo').addEventListener('touchstart', function (e) {
-          App.prop.socket.emit('gogogo', data);
+        App.prop.message.innerHTML = '<a data-player_id=\'' + App.prop._id + '\' href=\'\' id=\'gogogo\'>GO GO GO</a>';
+        document.getElementById('gogogo').addEventListener('click', function (e) {
+          e.preventDefault();
+          App.prop.socket.emit('gogogo', {
+            _id: e.target.dataset.player_id
+          });
         });
       } else {
-        App.prop.players.innerHTML += '<ul>';
+        App.prop.players.innerHTML = '<ul>';
+        console.log(data.players);
         data.players.forEach(function (player) {
-          App.prop.players.innerHTML += '<li data-player_id="' + player._id + '">' + player._id + '</li>';
+          App.prop.players.innerHTML += '<li data-player_id="' + player + '">' + player + '</li>';
         });
         App.prop.players.innerHTML += '</ul>';
         // App.Screen.init(); // DISPLAY GAME SCREEN
@@ -54,7 +59,8 @@ var App = (function () {
     },
 
     onChangeColour: function (data) {
-      document.querySelectorAll('#gogogo[data-player_id=' + data._id + ']').style.color = data.colour;
+      console.log(data);
+      document.querySelectorAll('li[data-player_id=\'' + data._id + '\']')[0].style.color = data.colour;
     }
 
   };
