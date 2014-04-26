@@ -5,6 +5,7 @@ var App = (function () {
   return {
 
     prop: {
+      message: document.getElementById('hello')
     },
 
     init: function () {
@@ -16,16 +17,23 @@ var App = (function () {
 
     initEvents: function () {
       App.prop.socket.on('connect', App.onConnect.bind(App));
+      App.prop.socket.on('gameStart', App.onGameStart.bind(App));
     },
 
     bindEvents: function () {
     },
 
     onConnect: function () {
+      App.prop.message.innerHTML = 'Waiting...';
       App.prop.socket.emit('join', {
-        _id: Math.random(),
-        code: gameCode
+        _id: Math.floor(Math.random() * 100000000),
+        room: gameCode
       });
+    },
+
+    onGameStart: function () {
+      App.prop.message.innerHTML = 'game started';
+      console.log('hi');
     }
 
   };
