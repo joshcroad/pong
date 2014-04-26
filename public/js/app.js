@@ -32,9 +32,17 @@ var App = (function () {
       });
     },
 
-    onGameStart: function () {
-      App.prop.message.innerHTML = 'game started';
-      console.log('hi');
+    onGameStart: function (data) {
+      if (navigator.userAgent.match(/iPhone/i)) {
+        // App.Pad.init(); // DISPLAY GAME PAD ON MOBILE
+        // iterate over data.players and put them in string var=players;
+        // <div data-player_id="">
+        App.prop.players.innerHTML = players;
+        App.prop.message.innerHTML = '<a data-player_id=\'\' href=\'\' id=\'gogogo\'>GO GO GO</a>';
+      } else {
+        // App.Screen.init(); // DISPLAY GAME SCREEN
+        App.prop.message.innerHTML = 'game started';
+      }
     }
 
   };
