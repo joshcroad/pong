@@ -27,7 +27,8 @@ var App = (function () {
       App.prop.message.innerHTML = 'Waiting...';
       App.prop.socket.emit('join', {
         _id: Math.floor(Math.random() * 100000000),
-        room: gameCode
+        room: gameCode,
+        mobile: navigator.userAgent.match(/iPhone/i)
       });
     },
 
