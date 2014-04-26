@@ -48,7 +48,6 @@ var App = (function () {
         });
       } else {
         App.prop.players.innerHTML = '<ul>';
-        console.log(data.players);
         data.players.forEach(function (player) {
           App.prop.players.innerHTML += '<li data-player_id="' + player + '">' + player + '</li>';
         });
@@ -59,7 +58,6 @@ var App = (function () {
     },
 
     onChangeColour: function (data) {
-      console.log(data);
       document.querySelectorAll('li[data-player_id=\'' + data._id + '\']')[0].style.color = data.colour;
     }
 
